@@ -1,0 +1,24 @@
+### project
+
+### vagrant
+.cache/**
+.config/**
+.vagrant/**
+.*vagrant.json
+
+### ide
+*.idea
+*.iml
+nbproject
+*.swp
+
+### os
+.DS_Store
+thumbs.db
+Thumbs.db
+desktop.ini
+.bash_history
+
+### ide
+.idea/
+

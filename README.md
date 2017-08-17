@@ -14,3 +14,6 @@ optional arguments:
   --user USER, -u USER  User name for Urbackup server
   --password PASSWORD, -p PASSWORD
                         user password for Urbackup server
+
+This fork gives logically other output than the original work. Feel free
+to comment or contribute by creating an issue.
