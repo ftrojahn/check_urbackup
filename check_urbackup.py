@@ -35,7 +35,7 @@ def Statuscheck(client):
     warningimagetime = (int(args.warning[0])+7)*24*60*60 # 4 days
     filescritical = client["lastbackup"]!="-" and client["lastbackup"]>0 and client["lastbackup"] < client["lastseen"] - criticalbackuptime
     fileswarning = client["lastbackup"]=="-" or client["lastbackup"]=="0" or client["lastbackup"] < client["lastseen"] - warningbackuptime
-    if client["status"] > 0:
+    if client["status"] > 2:
         imagecritical = False
         imagewarning = True
         ClientStatus = "Foreign"
@@ -164,38 +164,38 @@ args = parser.parse_args()
 
 if args.host and args.user and args.password and args.critical and args.warning:
     try:
-    server = urbackup_api.urbackup_server("http://"+ args.host[0] +":55414/x", args.user[0], args.password[0])
-    # TODO: make url as arg
-    # server = urbackup_api.urbackup_server("https://"+ args.host[0] +"/urbackup/x", args.user[0], args.password[0])
-    returnstatus = 0
-    clients = server.get_status()
-    # Debug:
-    # print(clients)
-    for client in clients:
-        GlobalStatus.append(Statuscheck(client))
-        Globalstat = set(GlobalStatus)
-    from collections import Counter
-    while True:
-        if "CRITICAL" in Globalstat:
-            #print(Globalstat)
-            print("CRITICAL -", Counter(GlobalStatus)['CRITICAL'], "/", Counter(GlobalStatus)['WARNING'], "/", Counter(GlobalStatus)['OK'], "/", Counter(GlobalStatus)['Unknown'])
-            returnstatus = 2
-            break
-        elif "WARNING" in Globalstat:
-            #print(Globalstat)
-            print("WARNING -", Counter(GlobalStatus)['CRITICAL'], "/", Counter(GlobalStatus)['WARNING'], "/", Counter(GlobalStatus)['OK'], "/", Counter(GlobalStatus)['Unknown'])
-            returnstatus = 1
-            break
-        elif "OK" in Globalstat:
-            #print(Globalstat)
-            print("OK -", Counter(GlobalStatus)['CRITICAL'], "/", Counter(GlobalStatus)['WARNING'], "/", Counter(GlobalStatus)['OK'], "/", Counter(GlobalStatus)['Unknown'])
-            break
-        else:
-            print("UNKOWN")
-            returnstatus = -1
-            break
-    print(ClientPrint)
-    sys.exit(returnstatus)
+      # server = urbackup_api.urbackup_server("http://"+ args.host[0] +":55414/x", args.user[0], args.password[0])
+      # TODO: make url as arg
+      server = urbackup_api.urbackup_server("https://"+ args.host[0] +"/urbackup/x", args.user[0], args.password[0])
+      returnstatus = 0
+      clients = server.get_status()
+      # Debug:
+      # print(clients)
+      for client in clients:
+          GlobalStatus.append(Statuscheck(client))
+          Globalstat = set(GlobalStatus)
+      from collections import Counter
+      while True:
+          if "CRITICAL" in Globalstat:
+              #print(Globalstat)
+              print("CRITICAL -", Counter(GlobalStatus)['CRITICAL'], "/", Counter(GlobalStatus)['WARNING'], "/", Counter(GlobalStatus)['OK'], "/", Counter(GlobalStatus)['Unknown'])
+              returnstatus = 2
+              break
+          elif "WARNING" in Globalstat:
+              #print(Globalstat)
+              print("WARNING -", Counter(GlobalStatus)['CRITICAL'], "/", Counter(GlobalStatus)['WARNING'], "/", Counter(GlobalStatus)['OK'], "/", Counter(GlobalStatus)['Unknown'])
+              returnstatus = 1
+              break
+          elif "OK" in Globalstat:
+              #print(Globalstat)
+              print("OK -", Counter(GlobalStatus)['CRITICAL'], "/", Counter(GlobalStatus)['WARNING'], "/", Counter(GlobalStatus)['OK'], "/", Counter(GlobalStatus)['Unknown'])
+              break
+          else:
+              print("UNKOWN")
+              returnstatus = -1
+              break
+      print(ClientPrint)
+      sys.exit(returnstatus)
     
 
     except Exception as e:
